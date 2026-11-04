@@ -1,0 +1,21 @@
+nodeClass:
+  name: default
+  role: ""
+  amiAlias: al2023@latest
+  rootVolumeGiB: 50
+  discoveryTag: ""
+  tags: {}
+
+nodePool:
+  name: default
+  capacityTypes: [spot, on-demand]
+  architectures: [amd64, arm64]
+  instanceCategories: [c, m, r]
+  instanceGeneration: "5"
+  cpuLimit: "200"
+  memoryLimit: 800Gi
+  consolidationPolicy: WhenEmptyOrUnderutilized
+  consolidateAfter: 1m
+  expireAfter: 720h
+  disruptionBudget: 10%
+  weight: 10
