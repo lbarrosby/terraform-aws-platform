@@ -1,0 +1,11 @@
+severity:
+  - HIGH
+  - CRITICAL
+scan:
+  skip-dirs:
+    - "**/.terraform"
+misconfiguration:
+  scanners:
+    - terraform
+    - helm
+ignorefile: .trivyignore

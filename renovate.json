@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommits"
+  ],
+  "labels": ["dependencies"],
+  "schedule": ["before 6am on monday"],
+  "terraform": {
+    "rangeStrategy": "pin"
+  },
+  "packageRules": [
+    {
+      "description": "Provider constraints in modules are ranges on purpose; only bump the upper bound on majors.",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["required_provider"],
+      "matchFileNames": ["modules/**"],
+      "rangeStrategy": "widen"
+    },
+    {
+      "description": "Upstream terraform-aws-modules: group minors/patches, majors get their own PR.",
+      "matchManagers": ["terraform"],
+      "matchPackageNames": ["terraform-aws-modules/**"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "terraform-aws-modules"
+    },
+    {
+      "description": "GitHub Actions: pinned by digest, group non-major.",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "groupName": "github-actions"
+    },
+    {
+      "description": "Live layout references this repo's own tags; those are bumped by hand per environment.",
+      "matchManagers": ["terragrunt"],
+      "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Karpenter chart default and pinned tool versions annotated with a renovate comment.",
+      "managerFilePatterns": ["/(^|/)variables\\.tf$/", "/^\\.github/workflows/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)\\s*\\n[^\\n]*?\"(?<currentValue>[^\"]+)\""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Node security group egress 0.0.0.0/0 (upstream eks module, egress_all rule).
+# Nodes pull images, reach AWS APIs and the internet through NAT; egress control
+# belongs to NetworkPolicies / egress gateways, not to the node SG.
+AWS-0104
